@@ -2,7 +2,7 @@
 importScripts('/js/db.js');
 
 // 缓存版本号，更改此值将触发Service Worker更新
-const CACHE_VERSION = '3.0';
+const CACHE_VERSION = '4.1';
 const CACHE_NAME = 'offline-h5-v' + CACHE_VERSION;
 const OFFLINE_URL = 'offline.html';
 
@@ -52,11 +52,57 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('[Service Worker] 缓存资源');
-        // 预缓存关键资源
-        return cache.addAll(CACHE_ASSETS);
+        
+        // 初始化进度跟踪
+        const totalAssets = CACHE_ASSETS.length;
+        let loadedAssets = 0;
+        
+        // 向所有客户端发送进度更新
+        const sendProgressUpdate = (progress) => {
+          self.clients.matchAll().then(clients => {
+            clients.forEach(client => {
+              client.postMessage({
+                type: 'INSTALL_PROGRESS',
+                progress: progress,
+                loaded: loadedAssets,
+                total: totalAssets
+              });
+            });
+          });
+        };
+        
+        // 发送初始进度
+        sendProgressUpdate(0);
+        
+        // 单独缓存每个资源以跟踪进度
+        const cachePromises = CACHE_ASSETS.map(url => {
+          return cache.add(url).then(() => {
+            loadedAssets++;
+            const progress = Math.round((loadedAssets / totalAssets) * 100);
+            sendProgressUpdate(progress);
+          }).catch(err => {
+            console.error(`[Service Worker] 缓存资源失败: ${url}`, err);
+            // 即使失败也增加计数，以便进度条能够完成
+            loadedAssets++;
+            const progress = Math.round((loadedAssets / totalAssets) * 100);
+            sendProgressUpdate(progress);
+          });
+        });
+        
+        // 等待所有资源缓存完成
+        return Promise.all(cachePromises);
       })
       .catch(err => {
         console.error('[Service Worker] 缓存资源失败:', err);
+        // 发送错误消息
+        self.clients.matchAll().then(clients => {
+          clients.forEach(client => {
+            client.postMessage({
+              type: 'INSTALL_ERROR',
+              message: err.message
+            });
+          });
+        });
       })
   );
 });
