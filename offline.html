@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>离线模式 - 离线H5应用</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="theme-color" content="#4285f4">
+    <!-- Swiper轮播组件CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css">
+</head>
+<body>
+    <header>
+        <h1>离线H5应用 - 离线模式</h1>
+    </header>
+    
+    <main>
+        <section class="status-container">
+            <div id="online-status" class="offline">网络状态: <span id="status">离线</span></div>
+        </section>
+
+        <section class="content">
+            <h2>您当前处于离线状态</h2>
+            <p>无法连接到网络，但您仍然可以使用已缓存的功能。</p>
+            <div class="card">
+                <h3>离线模式下可用功能</h3>
+                <ul>
+                    <li>查看已缓存的内容</li>
+                    <li>创建新的笔记（将在网络恢复时自动同步）</li>
+                    <li>访问之前浏览过的页面</li>
+                    <li>浏览已缓存的图片和视频</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- 图片轮播 -->
+        <section class="carousel-section">
+            <h2>已缓存的图片</h2>
+            <div class="carousel-container">
+                <div class="swiper-container image-carousel">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src="images/a1.jpg" alt="图片1"></div>
+                        <div class="swiper-slide"><img src="images/a2.jpg" alt="图片2"></div>
+                        <div class="swiper-slide"><img src="images/a3.jpg" alt="图片3"></div>
+                        <div class="swiper-slide"><img src="images/a4.jpg" alt="图片4"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 视频轮播 -->
+        <section class="carousel-section">
+            <h2>已缓存的视频</h2>
+            <div class="carousel-container">
+                <div class="swiper-container video-carousel">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <video src="video/1.mp4" poster="video/cover-1.jpg" preload="metadata" controls playsinline webkit-playsinline></video>
+                        </div>
+                        <div class="swiper-slide">
+                            <video src="video/2.mp4" poster="video/cover-2.jpg" preload="metadata" controls playsinline webkit-playsinline></video>
+                        </div>
+                        <div class="swiper-slide">
+                            <video src="video/3.mp4" poster="video/cover-3.jpg" preload="metadata" controls playsinline webkit-playsinline></video>
+                        </div>
+                        <div class="swiper-slide">
+                            <video src="video/4.mp4" poster="video/cover-4.jpg" preload="metadata" controls playsinline webkit-playsinline></video>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination swiper-pagination-video"></div>
+                    <div class="swiper-button-next swiper-button-next-video"></div>
+                    <div class="swiper-button-prev swiper-button-prev-video"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2023 离线H5应用示例</p>
+    </footer>
+
+    <!-- Swiper轮播组件JS -->
+    <script src="js/swiper-bundle.min.js"></script>
+    <script src="js/carousel.js"></script>
+    <script>
+        // 监听网络状态变化
+        window.addEventListener('online', () => {
+            // 网络恢复时重新加载页面
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>
