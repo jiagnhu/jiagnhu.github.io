@@ -46,9 +46,9 @@ if ('serviceWorker' in navigator) {
     });
 } else {
     // 获取浏览器版本信息
-    const userAgent = navigator.userAgent;
-
     console.warn('当前浏览器不支持Service Worker');
+    const cacheStatus = document.getElementById('cache');
+    cacheStatus.textContent = '不支持Service Worker, 正在降级';
     // 使用IndexedDB降级方案
     if (window.indexedDB && window.initFallbackCache) {
         console.log('启用IndexedDB资源缓存降级方案');
@@ -57,6 +57,7 @@ if ('serviceWorker' in navigator) {
             window.initFallbackCache();
         });
     } else {
+      cacheStatus.textContent = '当前浏览器不支持IndexedDB，无法启用降级方案';
         console.warn('当前浏览器不支持IndexedDB，无法启用降级方案');
     }
 }
