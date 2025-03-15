@@ -2,71 +2,18 @@
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       document.getElementById('cache').textContent = '正在注册Service Worker...';
-        
-        // 创建进度条容器
-        const progressContainer = document.createElement('div');
-        progressContainer.id = 'sw-progress-container';
-        progressContainer.style.display = 'none';
-        
-        const progressBar = document.createElement('div');
-        progressBar.id = 'sw-progress-bar';
-        
-        const progressText = document.createElement('div');
-        progressText.id = 'sw-progress-text';
-        progressText.textContent = '0%';
-        
-        progressContainer.appendChild(progressBar);
-        progressContainer.appendChild(progressText);
-        
-        // 将进度条添加到状态容器中
-        const statusContainer = document.querySelector('.status-container');
-        statusContainer.appendChild(progressContainer);
-        progressContainer.style.display = 'block';
-        
         // 注册Service Worker
         navigator.serviceWorker.register('/sw.js')
             .then(registration => {
                 console.log('Service Worker 注册成功，作用域：', registration.scope);
-                
-                // 显示进度条
-                progressContainer.style.display = 'none';
-                
-                document.getElementById('cache').textContent = '正在安装...';
-                
                 updateCacheStatus();
                 
                 // 添加消息监听器，接收Service Worker发送的消息
                 navigator.serviceWorker.addEventListener('message', event => {
                     if (event.data && event.data.type === 'SYNC_COMPLETED') {
                         console.log('收到同步完成消息：', event.data.message);
-                        progressContainer.style.display = 'none';
                         // 刷新页面以显示最新状态
                         loadNotes();
-                    } else if (event.data && event.data.type === 'INSTALL_PROGRESS') {
-                        // 更新安装进度
-                        const progress = event.data.progress;
-                        const progressBar = document.getElementById('sw-progress-bar');
-                        const progressText = document.getElementById('sw-progress-text');
-                        
-                        progressBar.style.width = progress + '%';
-                        progressText.textContent = progress + '%';
-                        
-                        console.log(`Service Worker 安装进度: ${progress}% (${event.data.loaded}/${event.data.total})`);
-                        
-                        // 安装完成后更新状态
-                        if (progress === 100) {
-                            setTimeout(() => {
-                                progressContainer.style.display = 'none';
-                                document.getElementById('cache').textContent = '已安装';
-                                updateCacheStatus();
-                            }, 500);
-                        }
-                    } else if (event.data && event.data.type === 'INSTALL_ERROR') {
-                        // 显示安装错误
-                        console.error('Service Worker 安装错误:', event.data.message);
-                        progressContainer.style.display = 'none';
-                        document.getElementById('cache').textContent = '安装失败';
-                        document.getElementById('cache-status').classList.add('not-cached');
                     }
                 });
                 
