@@ -88,8 +88,15 @@
     <script>
         // 监听网络状态变化
         window.addEventListener('online', () => {
-            // 网络恢复时重新加载页面
-            window.location.reload();
+            // 网络恢复时返回上一个在线页面
+            const lastPage = sessionStorage.getItem('lastOnlinePage');
+            if (lastPage) {
+                console.log('网络已恢复，返回上一个在线页面:', lastPage);
+                window.location.href = lastPage;
+            } else {
+                // 如果没有保存的页面，返回首页
+                window.location.href = '/';
+            }
         });
     </script>
 </body>

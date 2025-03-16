@@ -77,9 +77,37 @@ function openResourcesDB() {
   });
 }
 
+// 检查资源是否已存在于缓存中
+async function isResourceCached(url) {
+  try {
+    const db = await openResourcesDB();
+    const transaction = db.transaction(RESOURCES_STORE, 'readonly');
+    const store = transaction.objectStore(RESOURCES_STORE);
+    
+    // 查询资源
+    const resource = await new Promise((resolve, reject) => {
+      const request = store.get(url);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = (e) => reject(e.target.error);
+    });
+    
+    return !!resource; // 如果资源存在，返回true，否则返回false
+  } catch (error) {
+    console.error(`检查资源缓存状态失败: ${url}`, error);
+    return false;
+  }
+}
+
 // 缓存单个资源
 async function cacheResource(url) {
   try {
+    // 首先检查资源是否已经缓存
+    const isCached = await isResourceCached(url);
+    if (isCached) {
+      console.log(`资源已存在于缓存中，跳过: ${url}`);
+      return true;
+    }
+    
     // 获取资源
     const response = await fetch(url, { cache: 'no-store' });
     if (!response || !response.ok) {
@@ -181,15 +209,42 @@ async function getResourceFromCache(url) {
   }
 }
 
+// 检查网络状态并在离线时重定向到离线页面
+function checkOfflineAndRedirect() {
+  // 如果当前不在线且当前页面不是离线页面
+  if (!navigator.onLine && !window.location.pathname.includes('/offline.html')) {
+    console.log('检测到网络离线状态，重定向到离线页面');
+    // 保存当前URL，以便在恢复网络连接后返回
+    sessionStorage.setItem('lastOnlinePage', window.location.href);
+    // 重定向到离线页面
+    window.location.href = '/offline.html';
+    return true;
+  }
+  return false;
+}
+
 // 拦截网络请求
 function setupFetchInterceptor() {
   // 保存原始fetch函数
   const originalFetch = window.fetch;
   
+  // 检查是否需要重定向到离线页面
+  if (checkOfflineAndRedirect()) {
+    return; // 如果已重定向，不需要继续设置拦截器
+  }
+  
   // 替换fetch函数
   window.fetch = async function(input, init) {
     const request = input instanceof Request ? input : new Request(input);
     const url = request.url;
+    
+    // 检查网络状态
+    if (!navigator.onLine) {
+      // 如果是HTML请求，尝试重定向到离线页面
+      if (request.headers.get('accept') && request.headers.get('accept').includes('text/html')) {
+        checkOfflineAndRedirect();
+      }
+    }
     
     // 只处理GET请求
     if (request.method !== 'GET') {
@@ -258,10 +313,39 @@ function setupFetchInterceptor() {
   console.log('网络请求拦截器已设置');
 }
 
+// 设置网络状态监听器
+function setupNetworkListeners() {
+  // 网络恢复在线时的处理
+  window.addEventListener('online', () => {
+    console.log('网络已恢复连接');
+    // 如果当前在离线页面，且有保存的上一个在线页面，则返回该页面
+    if (window.location.pathname.includes('/offline.html')) {
+      const lastPage = sessionStorage.getItem('lastOnlinePage');
+      if (lastPage) {
+        console.log('返回上一个在线页面:', lastPage);
+        window.location.href = lastPage;
+      } else {
+        // 如果没有保存的页面，返回首页
+        window.location.href = '/';
+      }
+    }
+  });
+  
+  // 网络断开连接时的处理
+  window.addEventListener('offline', () => {
+    console.log('网络已断开连接');
+    // 检查是否需要重定向到离线页面
+    checkOfflineAndRedirect();
+  });
+}
+
 // 初始化降级方案
 async function initFallbackCache() {
   try {
     console.log('初始化IndexedDB资源缓存降级方案...');
+    
+    // 设置网络状态监听器
+    setupNetworkListeners();
     
     // 设置网络请求拦截器
     setupFetchInterceptor();
