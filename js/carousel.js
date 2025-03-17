@@ -4,7 +4,7 @@ let videoSwiper; // 全局变量，用于在其他函数中访问视频轮播实
 
 document.addEventListener('DOMContentLoaded', () => {
     // 初始化图片轮播
-    initImageCarousel();
+    // initImageCarousel();
     
     // 初始化视频轮播
     initVideoCarousel();

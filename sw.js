@@ -2,7 +2,7 @@
 importScripts('/js/db.js');
 
 // 缓存版本号，更改此值将触发Service Worker更新
-const CACHE_VERSION = '3.1';
+const CACHE_VERSION = '3.2';
 const CACHE_NAME = 'offline-h5-v' + CACHE_VERSION;
 const OFFLINE_URL = 'offline.html';
 
