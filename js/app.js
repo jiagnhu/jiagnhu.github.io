@@ -115,19 +115,19 @@ document.addEventListener('DOMContentLoaded', () => {
     updateOnlineStatus();
     
     // 设置保存笔记按钮事件
-    const saveButton = document.getElementById('save-note');
-    const noteInput = document.getElementById('note-input');
+    // const saveButton = document.getElementById('save-note');
+    // const noteInput = document.getElementById('note-input');
     
-    saveButton.addEventListener('click', () => {
-        const noteText = noteInput.value.trim();
-        if (noteText) {
-            saveNote(noteText);
-            noteInput.value = '';
-        }
-    });
+    // saveButton.addEventListener('click', () => {
+    //     const noteText = noteInput.value.trim();
+    //     if (noteText) {
+    //         saveNote(noteText);
+    //         noteInput.value = '';
+    //     }
+    // });
     
-    // 加载已保存的笔记
-    loadNotes();
+    // // 加载已保存的笔记
+    // loadNotes();
 });
 
 // 保存笔记

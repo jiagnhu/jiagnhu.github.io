@@ -2,7 +2,7 @@
 importScripts('/js/db.js');
 
 // 缓存版本号，更改此值将触发Service Worker更新
-const CACHE_VERSION = '3.2.1';
+const CACHE_VERSION = '3.2.4';
 const CACHE_NAME = 'offline-h5-v' + CACHE_VERSION;
 const OFFLINE_URL = 'offline.html';
 
@@ -21,17 +21,11 @@ const CACHE_ASSETS = [
   '/images/icons/icon-512x512.png',
   '/images/icons/b1.png',
   '/images/icons/icon-192x192.png',
-  // 图片资源
-  '/images/a1.jpg',
-  '/images/a2.jpg',
-  '/images/a3.jpg',
-  '/images/a4.jpg',
   // 视频资源
   '/video/1.mp4',
   '/video/2.mp4',
   '/video/3.mp4',
   '/video/4.mp4',
-  '/video/live.mp4',
   '/video/cover-1.jpg',
   '/video/cover-2.jpg',
   '/video/cover-3.jpg',

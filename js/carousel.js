@@ -3,9 +3,6 @@
 let videoSwiper; // 全局变量，用于在其他函数中访问视频轮播实例
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 初始化图片轮播
-    // initImageCarousel();
-    
     // 初始化视频轮播
     initVideoCarousel();
     
@@ -13,26 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initModalEvents();
 });
 
-// 初始化图片轮播
-function initImageCarousel() {
-    const imageSwiper = new Swiper('.image-carousel', {
-        slidesPerView: 1,
-        spaceBetween: 30,
-        loop: true,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-    });
-}
 
 // 初始化视频轮播
 function initVideoCarousel() {
