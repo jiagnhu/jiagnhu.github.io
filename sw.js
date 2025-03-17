@@ -1,27 +1,36 @@
+// @ts-nocheck
 // 导入数据库操作函数
 importScripts('/js/db.js');
 
 // 缓存版本号，更改此值将触发Service Worker更新
-const CACHE_VERSION = '3.2.8';
+const CACHE_VERSION = '3.3.0';
 const CACHE_NAME = 'offline-h5-v' + CACHE_VERSION;
 const OFFLINE_URL = 'offline.html';
 
 // 需要缓存的资源列表
 const CACHE_ASSETS = [
+  // 页面资源
   '/',
   '/index.html',
   '/offline.html',
+  // css资源
   '/css/style.css',
+  '/js/rem.js',
+  // js资源
   '/js/app.js',
   '/js/db.js',
   '/js/update-notification.js',
+  'js/carousel.js',
+  // 配置文件
   '/manifest.json',
-  '/favicon.ico',
   // 图标资源
+  '/favicon.ico',
   '/images/icons/g10.png',
   '/images/icons/icon-512x512.png',
   '/images/icons/b1.png',
   '/images/icons/icon-192x192.png',
+  './images/btn-start.png',
+  './images/editor-star.gif',
   // 视频资源
   '/video/1.mp4',
   '/video/2.mp4',

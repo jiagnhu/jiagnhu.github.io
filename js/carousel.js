@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 初始化模态框事件
     initModalEvents();
+
+    // 初始化开始按钮事件
+    initStartButtonEvent();
 });
 
 
@@ -77,6 +80,11 @@ function setupVideoEndedListeners() {
     });
     
     // 自动播放第一个视频
+    // playFirstVideo(videos)
+}
+
+// 自动播放第一个视频
+function playFirstVideo(videos) {
     if (videos.length > 0) {
         // 确保视频是静音的，以绕过浏览器自动播放限制
         videos[0].muted = true;
@@ -118,6 +126,33 @@ function hideModal() {
 }
 
 // 初始化模态框事件
+// 初始化开始按钮事件
+function initStartButtonEvent() {
+    const startBtn = document.querySelector('.btn-start');
+    const pageFull = document.querySelector('.page-full');
+    const carouselSection = document.querySelector('.carousel-section');
+
+    if (startBtn) {
+        startBtn.addEventListener('click', () => {
+            if (pageFull) {
+                pageFull.style.opacity = '0';
+                setTimeout(() => {
+                    pageFull.style.display = 'none';
+                }, 500);
+            }
+            if (carouselSection) {
+                carouselSection.style.display = 'block';
+            }
+            // 播放第一个视频
+            const firstVideo = document.querySelector('.video-carousel video');
+            if (firstVideo) {
+                firstVideo.currentTime = 0;
+                firstVideo.play().catch(e => console.log('自动播放失败:', e));
+            }
+        });
+    }
+}
+
 function initModalEvents() {
     const confirmBtn = document.getElementById('modal-confirm');
     const cancelBtn = document.getElementById('modal-cancel');

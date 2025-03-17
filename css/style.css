@@ -16,9 +16,9 @@ body {
     line-height: 1.6;
     color: #333;
     background-color: #f5f5f5;
-    max-width: 1200px;
+    max-width: 23.077rem;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 0.385rem;
     /* 禁用iOS Safari的弹性滚动效果 */
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
@@ -31,11 +31,11 @@ body {
 header {
     background-color: #4285f4;
     color: white;
-    padding: 1rem;
+    padding: 0.385rem;
     text-align: center;
-    margin-bottom: 2rem;
-    border-radius: 0 0 8px 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.769rem;
+    border-radius: 0 0 0.154rem 0.154rem;
+    box-shadow: 0 0.038rem 0.096rem rgba(0, 0, 0, 0.1);
 }
 
 main {
@@ -50,22 +50,22 @@ main {
 }
 
 section {
-    margin-bottom: 2rem;
+    margin-bottom: 0.769rem;
 }
 
 h1 {
-    font-size: 2rem;
+    font-size: 0.769rem;
 }
 
 h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 0.577rem;
+    margin-bottom: 0.385rem;
     color: #4285f4;
 }
 
 h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.8rem;
+    font-size: 0.462rem;
+    margin-bottom: 0.308rem;
     color: #5f6368;
 }
 
@@ -78,15 +78,15 @@ p {
     display: flex;
     justify-content: space-between;
     background-color: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 2rem;
+    padding: 0.385rem;
+    border-radius: 0.154rem;
+    margin-bottom: 0.769rem;
     flex-wrap: wrap;
 }
 
 #online-status, #cache-status {
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    padding: 0.192rem 0.385rem;
+    border-radius: 0.077rem;
     font-weight: bold;
 }
 
@@ -97,19 +97,19 @@ p {
 /* 卡片样式 */
 .card {
     background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-top: 1rem;
-    border-left: 4px solid #4285f4;
+    border-radius: 0.154rem;
+    padding: 0.577rem;
+    margin-top: 0.385rem;
+    border-left: 0.077rem solid #4285f4;
 }
 
 ul {
     list-style-position: inside;
-    margin-left: 1rem;
+    margin-left: 0.385rem;
 }
 
 li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.192rem;
 }
 
 /* 笔记功能样式 */
@@ -119,11 +119,11 @@ li {
 
 #note-input {
     width: 100%;
-    height: 100px;
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 1rem;
+    height: 3.846rem;
+    padding: 0.308rem;
+    border: 0.019rem solid #ddd;
+    border-radius: 0.077rem;
+    margin-bottom: 0.385rem;
     font-family: inherit;
     resize: vertical;
 }
@@ -132,8 +132,8 @@ button {
     background-color: #4285f4;
     color: white;
     border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 4px;
+    padding: 0.308rem 0.577rem;
+    border-radius: 0.077rem;
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s;
@@ -171,6 +171,7 @@ footer {
     margin-bottom: 0;
     width: 100%;
     height: 100%;
+    display: none;
 }
 
 .carousel-container {
@@ -228,7 +229,7 @@ footer {
 
 .swiper-pagination {
     position: absolute;
-    bottom: 10px;
+    bottom: 0.192rem;
     width: 100%;
 }
 
@@ -276,4 +277,48 @@ footer {
 .not-cached {
     background-color: #fff3cd;
     color: #856404;
+}
+
+.page-full {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height:100%;
+    z-index: 100;
+    background:url(../video/cover-1.jpg) no-repeat 0 center / 100%;
+    opacity: 1;
+    transition: opacity 0.5s ease
+}
+
+.page-full .page-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 16.5rem;
+    margin: auto;
+    overflow: hidden;
+}
+
+
+.page-full .editor-star {
+    background: url(../images/editor-star.gif) no-repeat 0 / 100%;
+    width: 0.7rem;
+    height: 1.07rem;
+    position: absolute;
+    left: 1.70rem;
+    top: 7.2rem;
+}
+
+.page-full .btn-start {
+    position: absolute;
+    bottom: 2.5rem;
+    background: url(../images/btn-start.png) no-repeat 0 / 100%;
+    width: 1.46rem;
+    height: 1.46rem;
+    /* 居中 */
+    left: 50%;
+    transform: translateX(-50%);
 }
