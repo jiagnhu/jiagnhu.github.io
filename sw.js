@@ -2,7 +2,7 @@
 importScripts('/js/db.js');
 
 // 缓存版本号，更改此值将触发Service Worker更新
-const CACHE_VERSION = '3.2.4';
+const CACHE_VERSION = '3.2.5';
 const CACHE_NAME = 'offline-h5-v' + CACHE_VERSION;
 const OFFLINE_URL = 'offline.html';
 
@@ -85,14 +85,9 @@ self.addEventListener('fetch', (event) => {
   // 跳过跨域请求
   if (!event.request.url.startsWith(self.location.origin)) return;
   
-  // 网络优先策略 - 适用于API请求
-  if (event.request.url.includes('/api/')) {
-    networkFirstStrategy(event);
-    return;
-  }
-  
-  // 缓存优先策略 - 适用于静态资源
-  cacheFirstStrategy(event);
+  // 网络优先策略 - 适用于API请求和静态资源
+  // 根据用户需求，所有资源都使用网络优先策略
+  networkFirstStrategy(event);
 });
 
 // 缓存优先策略
