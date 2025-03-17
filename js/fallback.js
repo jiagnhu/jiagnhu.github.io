@@ -1,13 +1,13 @@
+//@ts-nocheck
 // IndexedDB资源缓存降级方案
 // 当浏览器不支持Service Worker时使用
-
 // 缓存版本号
-const CACHE_VERSION = '1.0';
+const CACHE_VERSION2 = '1.0';
 const RESOURCES_STORE = 'cached-resources';
-const RESOURCES_DB = 'offline-resources-v' + CACHE_VERSION;
+const RESOURCES_DB = 'offline-resources-v' + CACHE_VERSION2;
 
 // 从sw.js中复制的需要缓存的资源列表
-const CACHE_ASSETS = [
+const CACHE_ASSETS2 = [
   '/',
   '/index.html',
   '/offline.html',
@@ -156,7 +156,7 @@ async function precacheResources() {
   console.log('开始预缓存资源...');
   let successCount = 0;
   
-  for (const url of CACHE_ASSETS) {
+  for (const url of CACHE_ASSETS2) {
     try {
       // 构建完整URL
       const fullUrl = new URL(url, window.location.origin).href;
@@ -167,7 +167,7 @@ async function precacheResources() {
     }
   }
   
-  console.log(`预缓存完成，成功: ${successCount}/${CACHE_ASSETS.length}`);
+  console.log(`预缓存完成，成功: ${successCount}/${CACHE_ASSETS2.length}`);
   return successCount;
 }
 

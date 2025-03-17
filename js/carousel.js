@@ -1,5 +1,5 @@
+//@ts-nocheck
 // 轮播功能实现
-
 let videoSwiper; // 全局变量，用于在其他函数中访问视频轮播实例
 
 document.addEventListener('DOMContentLoaded', () => {

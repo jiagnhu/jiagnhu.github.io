@@ -80,15 +80,21 @@ function showUpdateNotification() {
     }
     
     // 添加事件监听器
-    document.getElementById('update-now').addEventListener('click', () => {
-        // 刷新页面以应用新版本
-        window.location.reload();
-    });
+    const updateNowBtn = document.getElementById('update-now');
+    if (updateNowBtn) {
+        updateNowBtn.addEventListener('click', () => {
+            // 刷新页面以应用新版本
+            window.location.reload();
+        });
+    }
     
-    document.getElementById('update-later').addEventListener('click', () => {
-        // 隐藏提示
-        notification.remove();
-    });
+    const updateLaterBtn = document.getElementById('update-later');
+    if (updateLaterBtn) {
+        updateLaterBtn.addEventListener('click', () => {
+            // 隐藏提示
+            notification.remove();
+        });
+    }
 }
 
 // 导出函数

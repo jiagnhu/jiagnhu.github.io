@@ -1,7 +1,10 @@
+//@ts-nocheck
+
 // 检查浏览器是否支持Service Worker
+const cacheText = document.getElementById('cache');
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      document.getElementById('cache').textContent = '正在注册Service Worker...';
+      if (cacheText) cacheText.textContent = '正在注册Service Worker...';
         // 注册Service Worker
         navigator.serviceWorker.register('/sw.js')
             .then(registration => {
@@ -34,7 +37,7 @@ if ('serviceWorker' in navigator) {
             })
             .catch(error => {
                 console.error('Service Worker 注册失败：', error);
-                document.getElementById('cache').textContent = '未启用';
+                if (cacheText) cacheText.textContent = '未启用';
                 document.getElementById('cache-status').classList.add('not-cached');
             });
             
@@ -48,8 +51,7 @@ if ('serviceWorker' in navigator) {
 } else {
     // 获取浏览器版本信息
     console.warn('当前浏览器不支持Service Worker');
-    const cacheStatus = document.getElementById('cache');
-    cacheStatus.textContent = '不支持离线模式';
+    if (cacheText) cacheText.textContent = '不支持离线模式';
     // 使用IndexedDB降级方案
     // if (window.indexedDB && window.initFallbackCache) {
     //     console.log('启用IndexedDB资源缓存降级方案');
