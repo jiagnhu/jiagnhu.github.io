@@ -50,6 +50,8 @@ function showUpdateNotification() {
             .update-content p {
                 margin: 0 0 10px 0;
                 font-weight: bold;
+                font-size: 16px;
+                margin-bottom: 10px;
             }
             
             .update-actions {
@@ -68,12 +70,14 @@ function showUpdateNotification() {
             #update-now {
                 background-color: white;
                 color: #4285f4;
+                font-size: 14px;
             }
             
             #update-later {
                 background-color: transparent;
                 color: white;
                 border: 1px solid white;
+                font-size: 14px;
             }
         `;
         document.head.appendChild(style);
