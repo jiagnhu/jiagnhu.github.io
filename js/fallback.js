@@ -216,11 +216,34 @@ function checkOfflineAndRedirect() {
     console.log('检测到网络离线状态，重定向到离线页面');
     // 保存当前URL，以便在恢复网络连接后返回
     sessionStorage.setItem('lastOnlinePage', window.location.href);
+    // 保存离线检测时间戳
+    sessionStorage.setItem('offlineDetectedTime', Date.now());
     // 重定向到离线页面
     window.location.href = '/offline.html';
     return true;
   }
   return false;
+}
+
+// 定期检查网络状态
+function setupPeriodicNetworkCheck() {
+  // 每10秒检查一次网络状态
+  setInterval(() => {
+    if (!navigator.onLine) {
+      // 如果当前不在线，检查是否需要重定向
+      checkOfflineAndRedirect();
+    } else if (window.location.pathname.includes('/offline.html')) {
+      // 如果在离线页面但网络已恢复，返回之前的页面
+      const lastPage = sessionStorage.getItem('lastOnlinePage');
+      if (lastPage) {
+        console.log('网络已恢复，返回上一个在线页面:', lastPage);
+        window.location.href = lastPage;
+      } else {
+        // 如果没有保存的页面，返回首页
+        window.location.href = '/';
+      }
+    }
+  }, 10000);
 }
 
 // 拦截网络请求
@@ -318,6 +341,9 @@ function setupNetworkListeners() {
   // 网络恢复在线时的处理
   window.addEventListener('online', () => {
     console.log('网络已恢复连接');
+    // 更新UI显示
+    updateNetworkStatusUI(true);
+    
     // 如果当前在离线页面，且有保存的上一个在线页面，则返回该页面
     if (window.location.pathname.includes('/offline.html')) {
       const lastPage = sessionStorage.getItem('lastOnlinePage');
@@ -329,14 +355,59 @@ function setupNetworkListeners() {
         window.location.href = '/';
       }
     }
+    
+    // 网络恢复后，检查是否需要更新缓存
+    checkAndUpdateCache();
   });
   
   // 网络断开连接时的处理
   window.addEventListener('offline', () => {
     console.log('网络已断开连接');
+    // 更新UI显示
+    updateNetworkStatusUI(false);
     // 检查是否需要重定向到离线页面
     checkOfflineAndRedirect();
   });
+  
+  // 页面加载时立即检查网络状态
+  updateNetworkStatusUI(navigator.onLine);
+  
+  // 设置定期检查
+  setupPeriodicNetworkCheck();
+}
+
+// 更新网络状态UI
+function updateNetworkStatusUI(isOnline) {
+  const status = document.getElementById('status');
+  const statusContainer = document.getElementById('online-status');
+  
+  if (status && statusContainer) {
+    if (isOnline) {
+      status.textContent = '在线';
+      statusContainer.classList.remove('offline');
+      statusContainer.classList.add('online');
+    } else {
+      status.textContent = '离线';
+      statusContainer.classList.remove('online');
+      statusContainer.classList.add('offline');
+    }
+  }
+}
+
+// 网络恢复后检查并更新缓存
+async function checkAndUpdateCache() {
+  try {
+    // 检查是否已有缓存
+    const hasCached = await checkCachedResources();
+    if (!hasCached) {
+      console.log('网络恢复后检测到无缓存，开始缓存资源...');
+      updateCacheStatusForFallback(null, '正在缓存...');
+      const cachedCount = await precacheResources();
+      updateCacheStatusForFallback(cachedCount > 0);
+    }
+  } catch (error) {
+    console.error('网络恢复后更新缓存失败:', error);
+  }
 }
 
 // 初始化降级方案
@@ -344,14 +415,29 @@ async function initFallbackCache() {
   try {
     console.log('初始化IndexedDB资源缓存降级方案...');
     
+    // 立即更新缓存状态为"正在缓存..."
+    updateCacheStatusForFallback(null, '正在缓存...');
+    
     // 设置网络状态监听器
     setupNetworkListeners();
     
     // 设置网络请求拦截器
     setupFetchInterceptor();
     
-    // 预缓存资源
-    const cachedCount = await precacheResources();
+    // 检查是否已有缓存资源
+    const hasCachedResources = await checkCachedResources();
+    
+    // 如果已经有缓存资源且不是首次加载，则不重复缓存
+    let cachedCount = 0;
+    if (!hasCachedResources || sessionStorage.getItem('firstLoad') !== 'false') {
+      // 预缓存资源
+      cachedCount = await precacheResources();
+      // 标记非首次加载
+      sessionStorage.setItem('firstLoad', 'false');
+    } else {
+      console.log('已存在缓存资源，跳过预缓存步骤');
+      cachedCount = 1; // 确保显示已缓存状态
+    }
     
     // 更新缓存状态显示
     updateCacheStatusForFallback(cachedCount > 0);
@@ -363,19 +449,52 @@ async function initFallbackCache() {
   }
 }
 
+// 检查是否已有缓存资源
+async function checkCachedResources() {
+  try {
+    const db = await openResourcesDB();
+    const transaction = db.transaction(RESOURCES_STORE, 'readonly');
+    const store = transaction.objectStore(RESOURCES_STORE);
+    
+    // 获取资源数量
+    const countRequest = store.count();
+    const count = await new Promise((resolve, reject) => {
+      countRequest.onsuccess = () => resolve(countRequest.result);
+      countRequest.onerror = (e) => reject(e.target.error);
+    });
+    
+    return count > 0;
+  } catch (error) {
+    console.error('检查缓存资源失败:', error);
+    return false;
+  }
+}
+
 // 更新缓存状态显示（针对降级方案）
-function updateCacheStatusForFallback(isCached) {
+function updateCacheStatusForFallback(isCached, customText) {
   const cacheStatus = document.getElementById('cache');
   const cacheContainer = document.getElementById('cache-status');
   
-  if (isCached) {
-    cacheStatus.textContent = 'IndexedDB已启用';
-    cacheContainer.classList.remove('not-cached');
-    cacheContainer.classList.add('cached');
-  } else {
-    cacheStatus.textContent = '未启用';
-    cacheContainer.classList.remove('cached');
-    cacheContainer.classList.add('not-cached');
+  if (cacheStatus && cacheContainer) {
+    if (isCached === null && customText) {
+      // 显示自定义文本（如"正在缓存..."）
+      cacheStatus.textContent = customText;
+      cacheContainer.classList.remove('cached');
+      cacheContainer.classList.remove('not-cached');
+      cacheContainer.classList.add('caching');
+    } else if (isCached) {
+      // 显示已缓存状态
+      cacheStatus.textContent = '已缓存（降级模式）';
+      cacheContainer.classList.remove('not-cached');
+      cacheContainer.classList.remove('caching');
+      cacheContainer.classList.add('cached');
+    } else {
+      // 显示未缓存状态
+      cacheStatus.textContent = '缓存失败（降级模式）';
+      cacheContainer.classList.remove('cached');
+      cacheContainer.classList.remove('caching');
+      cacheContainer.classList.add('not-cached');
+    }
   }
 }
 

@@ -49,18 +49,18 @@ if ('serviceWorker' in navigator) {
     // 获取浏览器版本信息
     console.warn('当前浏览器不支持Service Worker');
     const cacheStatus = document.getElementById('cache');
-    cacheStatus.textContent = '不支持Service Worker, 正在降级';
+    cacheStatus.textContent = '不支持离线模式';
     // 使用IndexedDB降级方案
-    if (window.indexedDB && window.initFallbackCache) {
-        console.log('启用IndexedDB资源缓存降级方案');
-        window.addEventListener('load', () => {
-            // 初始化IndexedDB资源缓存
-            window.initFallbackCache();
-        });
-    } else {
-      cacheStatus.textContent = '当前浏览器不支持IndexedDB，无法启用降级方案';
-        console.warn('当前浏览器不支持IndexedDB，无法启用降级方案');
-    }
+    // if (window.indexedDB && window.initFallbackCache) {
+    //     console.log('启用IndexedDB资源缓存降级方案');
+    //     window.addEventListener('load', () => {
+    //         // 初始化IndexedDB资源缓存
+    //         window.initFallbackCache();
+    //     });
+    // } else {
+    //   cacheStatus.textContent = '当前浏览器不支持IndexedDB，无法启用降级方案';
+    //     console.warn('当前浏览器不支持IndexedDB，无法启用降级方案');
+    // }
 }
 
 // 更新网络状态显示
