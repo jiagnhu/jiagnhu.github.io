@@ -1,5 +1,25 @@
 //@ts-nocheck
 
+// 设置视口高度变量
+function setViewportHeight() {
+    const vh = window.innerHeight * 0.01;
+    console.log('vh', vh);
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+// 初始设置视口高度
+setViewportHeight();
+
+// 监听窗口大小变化
+window.addEventListener('resize', () => {
+    setViewportHeight();
+});
+
+// 监听移动端浏览器工具栏显示/隐藏
+window.addEventListener('orientationchange', () => {
+    setViewportHeight();
+});
+
 // 检查浏览器是否支持Service Worker
 const cacheText = document.getElementById('cache');
 if ('serviceWorker' in navigator) {
@@ -111,8 +131,20 @@ window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
 
 // 页面加载时检查网络状态
+// 处理视口高度变化
+function updateViewportHeight() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+// 监听视口大小变化
+window.addEventListener('resize', () => {
+    updateViewportHeight();
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     updateOnlineStatus();
+    updateViewportHeight();
     
     // 设置保存笔记按钮事件
     // const saveButton = document.getElementById('save-note');
