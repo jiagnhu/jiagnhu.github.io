@@ -14,8 +14,8 @@ const CACHE_ASSETS = [
   '/offline.html',
   '/manifest.json',
   // ===== 生成资源 =====
-  '/images/cover-1.c430d792c7407caf1834.webp',
-  '/images/editor-star.f0be85a46f7d80ed0910.gif',
+  '/dist/images/cover-1.c430d792c7407caf1834.webp',
+  '/dist/images/editor-star.f0be85a46f7d80ed0910.gif',
   '/sw.js',
   '/favicon.ico',
   '/manifest.json',
