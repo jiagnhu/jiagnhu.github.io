@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="css/swiper-bundle.min.css">
     <!-- 模态框CSS -->
     <link rel="stylesheet" href="css/modal.css">
+    <!-- NFC功能CSS -->
+    <link rel="stylesheet" href="css/nfc.css">
 </head>
 <body>
     <!-- <header>
@@ -22,7 +24,11 @@
         <section class="status-container">
             <div id="online-status">网络状态: <span id="status">检查中...</span></div>
             <div id="cache-status">缓存状态: <span id="cache">检查中...</span></div>
+            <div id="nfc-status">NFC状态: <span>检查中...</span></div>
         </section>
+        
+        <!-- NFC内容显示区域 -->
+        <section id="nfc-content" style="display: none;"></section>
 
         <!-- <section class="content">
             <h2>欢迎使用离线H5应用</h2>
@@ -108,5 +114,7 @@
     <!-- Swiper轮播组件JS -->
     <script src="js/swiper-bundle.min.js"></script>
     <script src="js/carousel.js"></script>
+    <!-- NFC功能JS -->
+    <!-- <script src="js/nfc.js"></script> -->
 </body>
 </html>

@@ -3,7 +3,7 @@
 importScripts('/js/db.js');
 
 // 缓存版本号，更改此值将触发Service Worker更新
-const CACHE_VERSION = '3.3.0';
+const CACHE_VERSION = '3.3.2';
 const CACHE_NAME = 'offline-h5-v' + CACHE_VERSION;
 const OFFLINE_URL = 'offline.html';
 
@@ -21,6 +21,7 @@ const CACHE_ASSETS = [
   '/js/db.js',
   '/js/update-notification.js',
   'js/carousel.js',
+  '/js/nfc.js',
   // 配置文件
   '/manifest.json',
   // 图标资源

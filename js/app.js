@@ -2,6 +2,8 @@
 
 // 检查浏览器是否支持Service Worker
 const cacheText = document.getElementById('cache');
+
+
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       if (cacheText) cacheText.textContent = '正在注册Service Worker...';

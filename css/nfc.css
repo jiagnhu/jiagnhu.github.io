@@ -1,0 +1,118 @@
+/* NFC功能样式 */
+
+/* NFC状态显示 */
+#nfc-status {
+    padding: 0.192rem 0.385rem;
+    border-radius: 0.077rem;
+    font-weight: bold;
+    margin-top: 0.385rem;
+}
+
+#nfc-status span {
+    font-weight: normal;
+}
+
+/* NFC状态样式 */
+.nfc-not-supported {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.nfc-supported {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.nfc-enabled {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* NFC内容区域 */
+#nfc-content {
+    margin-top: 0.769rem;
+    padding: 0.385rem;
+    background-color: #f8f9fa;
+    border-radius: 0.154rem;
+    display: none; /* 默认隐藏，读取NFC标签后显示 */
+}
+
+/* NFC标签信息 */
+.nfc-tag-info {
+    margin-bottom: 0.385rem;
+    padding-bottom: 0.385rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.nfc-tag-info h3 {
+    color: #4285f4;
+    margin-bottom: 0.308rem;
+}
+
+/* NFC记录列表 */
+.nfc-records-list h3 {
+    color: #4285f4;
+    margin-bottom: 0.308rem;
+}
+
+.records-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.385rem;
+}
+
+/* 记录项 */
+.record-item {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.154rem;
+    overflow: hidden;
+}
+
+.record-header {
+    background-color: #e9ecef;
+    padding: 0.192rem 0.385rem;
+    font-weight: bold;
+    color: #495057;
+}
+
+.record-body {
+    padding: 0.385rem;
+}
+
+.record-body p {
+    margin-bottom: 0.192rem;
+}
+
+.record-body pre {
+    background-color: #f8f9fa;
+    padding: 0.308rem;
+    border-radius: 0.077rem;
+    overflow-x: auto;
+    font-size: 0.385rem;
+    margin-top: 0.192rem;
+}
+
+/* NFC按钮 */
+.nfc-button {
+    display: inline-block;
+    background-color: #4285f4;
+    color: white;
+    padding: 0.308rem 0.615rem;
+    border-radius: 0.154rem;
+    margin-top: 0.385rem;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.nfc-button:hover {
+    background-color: #3367d6;
+}
+
+.nfc-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
