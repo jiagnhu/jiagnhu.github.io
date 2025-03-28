@@ -6,7 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackServiceWorkerAssetsPlugin = require('./js/webpack-sw-assets-plugin');
-let distPath = 'dist/';
+let distPath = '';
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';

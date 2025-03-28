@@ -14,11 +14,11 @@ const CACHE_ASSETS = [
   '/offline.html',
   '/manifest.json',
   // ===== 生成资源 =====
-  '/dist/images/cover-1.c430d792c7407caf1834.webp',
-  '/dist/images/editor-star.f0be85a46f7d80ed0910.gif',
+  '/images/cover-1.c430d792c7407caf1834.webp',
+  '/images/editor-star.f0be85a46f7d80ed0910.gif',
   '/sw.js',
-  '/manifest.json',
   '/favicon.ico',
+  '/manifest.json',
   '/images/.DS_Store',
   '/images/btn-start.webp',
   '/images/editor-star.gif',
@@ -43,7 +43,7 @@ const CACHE_ASSETS = [
   '/dist/js/rem.e28b7c510f9f88cb9315.js',
   '/dist/js/db.d864342bf7d967d0e0b8.js',
   '/dist/js/updateNotification.5070a4861c46d80d1b1d.js',
-  '/dist/css/styles.be8b52ff0ffceb833e04.css',
+  '/dist/css/styles.26817d5264d65738108c.css',
   '/dist/js/styles.31d6cfe0d16ae931b73c.js',
 ];;
 
