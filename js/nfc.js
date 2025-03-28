@@ -233,10 +233,19 @@ window.nfcUtils = {
 
 // 当DOM加载完成后自动初始化NFC（如果需要）
 document.addEventListener('DOMContentLoaded', () => {
-    // 检查是否有NFC状态显示元素
-    const nfcStatusElement = document.getElementById('nfc-status');
-    if (nfcStatusElement) {
-        // 自动初始化NFC
-        initNFC();
+    if (enableNFCModule) {
+         // 检查是否有NFC状态显示元素
+        const nfcStatusElement = document.getElementById('nfc-status');
+        if (nfcStatusElement) {
+            // 自动初始化NFC
+            initNFC();
+            // 初始化NFC功能的代码
+            console.log('NFC模块已启用');
+        } else {
+            console.warn('找不到NFC状态显示元素');
+        }
+    } else {
+        console.warn('NFC模块未启用');
     }
+   
 });

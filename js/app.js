@@ -2,9 +2,11 @@
 
 // 检查浏览器是否支持Service Worker
 const cacheText = document.getElementById('cache');
+const enableOfflineMode = true;
+const enableNFCModule = true;
 
 
-if ('serviceWorker' in navigator) {
+if (enableOfflineMode && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       if (cacheText) cacheText.textContent = '正在注册Service Worker...';
         // 注册Service Worker
@@ -249,3 +251,4 @@ async function syncNotes() {
         console.error('同步笔记失败：', error);
     }
 }
+

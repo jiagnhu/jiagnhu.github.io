@@ -3,7 +3,7 @@
 importScripts('/js/db.js');
 
 // 缓存版本号，更改此值将触发Service Worker更新
-const CACHE_VERSION = '3.3.2';
+const CACHE_VERSION = '3.4.0';
 const CACHE_NAME = 'offline-h5-v' + CACHE_VERSION;
 const OFFLINE_URL = 'offline.html';
 
@@ -13,37 +13,38 @@ const CACHE_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
-  // css资源
-  '/css/style.css',
-  '/js/rem.js',
-  // js资源
-  '/js/app.js',
-  '/js/db.js',
-  '/js/update-notification.js',
-  'js/carousel.js',
-  '/js/nfc.js',
   // 配置文件
   '/manifest.json',
-  // 图标资源
-  '/favicon.ico',
-  '/images/icons/g10.png',
-  '/images/icons/icon-512x512.png',
-  '/images/icons/b1.png',
-  '/images/icons/icon-192x192.png',
-  './images/btn-start.png',
-  './images/editor-star.gif',
   // 视频资源
   '/video/1.mp4',
   '/video/2.mp4',
   '/video/3.mp4',
   '/video/4.mp4',
-  '/video/cover-1.jpg',
-  '/video/cover-2.jpg',
-  '/video/cover-3.jpg',
-  '/video/cover-4.jpg',
-  // 轮播组件资源
-  'js/swiper-bundle.min.js',
-  'css/swiper-bundle.min.css',
+  // css资源
+  '/css/style.css',
+  '/css/nfc.css',
+  '/css/modal.css',
+  '/css/swiper-bundle.min.css',
+  // js资源
+  '/js/app.js',
+  '/js/db.js',
+  '/js/update-notification.js',
+  '/js/carousel.js',
+  '/js/nfc.js',
+  '/js/video-cache-manager.js',
+  '/js/swiper-bundle.min.js',
+  '/js/rem.js',
+  // 图标资源
+  '/favicon.ico',
+  '/images/icons/g10.webp',
+  '/images/icons/b1.webp',
+  '/images/btn-start.webp',
+  '/images/editor-star.gif',
+  // 图片资源
+  '/video/cover-1.webp',
+  '/video/cover-2.webp',
+  '/video/cover-3.webp',
+  '/video/cover-4.webp',
 ];
 
 // Service Worker 安装事件
@@ -96,9 +97,30 @@ self.addEventListener('fetch', (event) => {
   // 跳过跨域请求
   if (!event.request.url.startsWith(self.location.origin)) return;
   
-  // 网络优先策略 - 适用于API请求和静态资源
-  // 根据用户需求，所有资源都使用网络优先策略
-  networkFirstStrategy(event);
+  const url = event.request.url;
+  
+  // 根据资源类型选择不同的缓存策略
+  if (url.includes('/api/')) {
+    // API请求使用网络优先策略
+    networkFirstStrategy(event);
+  } else if (
+    url.includes('.mp4') || 
+    url.includes('.webp') || 
+    url.includes('.css') || 
+    url.includes('.js') || 
+    url.includes('.ico') || 
+    url.includes('.gif') ||
+    url.includes('/images/') ||
+    url.includes('/video/') ||
+    url.endsWith('/')
+  ) {
+    // 静态资源使用缓存优先策略
+    cacheFirstStrategy(event);
+  } else {
+    console.log('[Service Worker] 其他资源:', url);
+    // 其他资源使用网络优先策略
+    networkFirstStrategy(event);
+  }
 });
 
 // 缓存优先策略

@@ -295,7 +295,7 @@ footer {
     width: 100%;
     height:100%;
     z-index: 100;
-    background:url(../video/cover-1.jpg) no-repeat 0 center / 100%;
+    background:url(../video/cover-1.webp) no-repeat 0 center / 100%;
     opacity: 1;
     transition: opacity 0.5s ease
 }
@@ -324,7 +324,7 @@ footer {
 .page-full .btn-start {
     position: absolute;
     bottom: 2.5rem;
-    background: url(../images/btn-start.png) no-repeat 0 / 100%;
+    background: url(../images/btn-start.webp) no-repeat 0 / 100%;
     width: 1.46rem;
     height: 1.46rem;
     /* 居中 */
