@@ -1,6 +1,6 @@
 // @ts-nocheck
 // 导入数据库操作函数
-importScripts('/js/db.d864342bf7d967d0e0b8.js');
+importScripts('/dits/js/db.d864342bf7d967d0e0b8.js');
 
 // 缓存版本号，更改此值将触发Service Worker更新
 const CACHE_VERSION = '3.5.0';
@@ -14,11 +14,11 @@ const CACHE_ASSETS = [
   '/offline.html',
   '/manifest.json',
   // ===== 生成资源 =====
-  '/images/cover-1.c430d792c7407caf1834.webp',
-  '/images/editor-star.f0be85a46f7d80ed0910.gif',
-  '/favicon.ico',
+  '/dits/images/cover-1.c430d792c7407caf1834.webp',
+  '/dits/images/editor-star.f0be85a46f7d80ed0910.gif',
   '/sw.js',
   '/manifest.json',
+  '/favicon.ico',
   '/images/.DS_Store',
   '/images/btn-start.webp',
   '/images/editor-star.gif',
@@ -36,15 +36,15 @@ const CACHE_ASSETS = [
   '/video/cover-4.webp',
   '/index.html',
   '/offline.html',
-  '/js/main.cb7eacc31fd91431a0da.js',
-  '/js/customCarousel.5b9386b227bd8aa1cb63.js',
-  '/js/nfc.ed538ba699de1ce2cbb2.js',
-  '/js/videoCacheManager.8e064b32f2f1d0e4d694.js',
-  '/js/rem.e28b7c510f9f88cb9315.js',
-  '/js/db.d864342bf7d967d0e0b8.js',
-  '/js/updateNotification.5070a4861c46d80d1b1d.js',
-  '/css/styles.26817d5264d65738108c.css',
-  '/js/styles.31d6cfe0d16ae931b73c.js',
+  '/dits/js/main.cb7eacc31fd91431a0da.js',
+  '/dits/js/customCarousel.5b9386b227bd8aa1cb63.js',
+  '/dits/js/nfc.ed538ba699de1ce2cbb2.js',
+  '/dits/js/videoCacheManager.8e064b32f2f1d0e4d694.js',
+  '/dits/js/rem.e28b7c510f9f88cb9315.js',
+  '/dits/js/db.d864342bf7d967d0e0b8.js',
+  '/dits/js/updateNotification.5070a4861c46d80d1b1d.js',
+  '/dits/css/styles.ef03784c1ee2e16b57f6.css',
+  '/dits/js/styles.31d6cfe0d16ae931b73c.js',
 ];;
 
 // Service Worker 安装事件

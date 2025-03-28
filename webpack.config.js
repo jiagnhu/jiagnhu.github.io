@@ -6,6 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackServiceWorkerAssetsPlugin = require('./js/webpack-sw-assets-plugin');
+let distPath = 'dits/';
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
@@ -37,7 +38,7 @@ module.exports = (env, argv) => {
       styles: ['./css/style.css', './css/custom-carousel.css', './css/nfc.css', './css/modal.css']
     },
     output: {
-      filename: 'js/[name].[contenthash].js',
+      filename: distPath + 'js/[name].[contenthash].js',
       path: path.resolve(__dirname, 'dist'),
       publicPath: '/'
     },
@@ -87,14 +88,14 @@ module.exports = (env, argv) => {
           test: /\.(png|svg|jpg|jpeg|gif|webp|ico)$/i,
           type: 'asset',
           generator: {
-            filename: 'images/[name].[hash][ext]'
+            filename: distPath + 'images/[name].[hash][ext]'
           }
         },
         {
           test: /\.(mp4|webm|ogg)$/i,
           type: 'asset/resource',
           generator: {
-            filename: 'video/[name].[hash][ext]'
+            filename: distPath + 'video/[name].[hash][ext]'
           }
         }
       ]
@@ -102,7 +103,7 @@ module.exports = (env, argv) => {
     plugins: [
       new CleanWebpackPlugin(),
       new MiniCssExtractPlugin({
-        filename: 'css/[name].[contenthash].css'
+        filename: distPath + 'css/[name].[contenthash].css'
       }),
       new HtmlWebpackPlugin({
         template: './index.html',
