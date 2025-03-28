@@ -1,6 +1,6 @@
 // NFC功能实现
 // 使用Web NFC API，仅支持Android Chrome 81+
-
+const enableNFCModule = true;
 // 检查浏览器是否支持NFC
 function isNfcSupported() {
     return 'NDEFReader' in window;

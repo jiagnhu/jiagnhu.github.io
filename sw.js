@@ -3,44 +3,35 @@
 importScripts('/js/db.js');
 
 // 缓存版本号，更改此值将触发Service Worker更新
-const CACHE_VERSION = '3.4.0';
+const CACHE_VERSION = '3.5.0';
 const CACHE_NAME = 'offline-h5-v' + CACHE_VERSION;
 const OFFLINE_URL = 'offline.html';
-
 // 需要缓存的资源列表
 const CACHE_ASSETS = [
-  // 页面资源
   '/',
   '/index.html',
   '/offline.html',
-  // 配置文件
   '/manifest.json',
-  // 视频资源
   '/video/1.mp4',
   '/video/2.mp4',
   '/video/3.mp4',
   '/video/4.mp4',
-  // css资源
   '/css/style.css',
   '/css/nfc.css',
   '/css/modal.css',
-  '/css/swiper-bundle.min.css',
-  // js资源
+  '/css/custom-carousel.css',
   '/js/app.js',
   '/js/db.js',
   '/js/update-notification.js',
-  '/js/carousel.js',
   '/js/nfc.js',
   '/js/video-cache-manager.js',
-  '/js/swiper-bundle.min.js',
   '/js/rem.js',
-  // 图标资源
+  '/js/custom-carousel.js',
   '/favicon.ico',
   '/images/icons/g10.webp',
   '/images/icons/b1.webp',
   '/images/btn-start.webp',
   '/images/editor-star.gif',
-  // 图片资源
   '/video/cover-1.webp',
   '/video/cover-2.webp',
   '/video/cover-3.webp',
@@ -50,6 +41,7 @@ const CACHE_ASSETS = [
 // Service Worker 安装事件
 self.addEventListener('install', (event) => {
   console.log('[Service Worker] 安装');
+  console.time('安装Service');
   
   // 强制激活当前版本的 Service Worker
   self.skipWaiting();
@@ -57,9 +49,34 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[Service Worker] 缓存资源');
-        // 预缓存关键资源
-        return cache.addAll(CACHE_ASSETS);
+        console.log('[Service Worker] 开始缓存资源');
+        
+        // 计算缓存进度
+        const totalAssets = CACHE_ASSETS.length;
+        let cachedCount = 0;
+        
+        // 使用Promise.all和map来跟踪每个资源的缓存进度
+        return Promise.all(
+          CACHE_ASSETS.map(url => {
+            return cache.add(url).then(() => {
+              cachedCount++;
+              const progress = Math.round((cachedCount / totalAssets) * 100);
+              console.log(`[Service Worker] 缓存进度: ${progress}% (${cachedCount}/${totalAssets})`);
+              
+              // 当所有资源缓存完成时
+              if (cachedCount === totalAssets) {
+                console.log('[Service Worker] 缓存完成: 100%');
+              }
+            }).catch(err => {
+              console.error(`[Service Worker] 缓存资源失败: ${url}`, err);
+
+              // 即使某个资源缓存失败，仍然计算进度
+              cachedCount++;
+              const progress = Math.round((cachedCount / totalAssets) * 100);
+              console.log(`[Service Worker] 缓存进度: ${progress}% (${cachedCount}/${totalAssets}) - 有错误`);
+            });
+          })
+        );
       })
       .catch(err => {
         console.error('[Service Worker] 缓存资源失败:', err);
@@ -84,7 +101,9 @@ self.addEventListener('activate', (event) => {
       );
     }).then(() => {
       // 确保立即接管所有页面
+      console.timeEnd('安装Service');
       return self.clients.claim();
+      
     })
   );
 });
@@ -130,6 +149,8 @@ function cacheFirstStrategy(event) {
       .then((cachedResponse) => {
         // 如果在缓存中找到响应，则返回缓存的版本
         if (cachedResponse) {
+          const url = event.request.url;
+          console.log('[Service Worker] 缓存命中:', url);
           return cachedResponse;
         }
         

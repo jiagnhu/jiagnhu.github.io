@@ -3,15 +3,16 @@
 // 检查浏览器是否支持Service Worker
 const cacheText = document.getElementById('cache');
 const enableOfflineMode = true;
-const enableNFCModule = true;
 
 
 if (enableOfflineMode && 'serviceWorker' in navigator) {
+    console.time('注册Service');
     window.addEventListener('load', () => {
       if (cacheText) cacheText.textContent = '正在注册Service Worker...';
         // 注册Service Worker
         navigator.serviceWorker.register('/sw.js')
             .then(registration => {
+                console.timeEnd('注册Service');
                 console.log('Service Worker 注册成功，作用域：', registration.scope);
                 updateCacheStatus();
                 
