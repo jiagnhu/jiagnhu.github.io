@@ -37,7 +37,7 @@ const CACHE_ASSETS = [
   '/index.html',
   '/offline.html',
   '/dist/js/main.cb7eacc31fd91431a0da.js',
-  '/dist/js/customCarousel.5b9386b227bd8aa1cb63.js',
+  '/dist/js/customCarousel.7b890c4348049128ea11.js',
   '/dist/js/nfc.ed538ba699de1ce2cbb2.js',
   '/dist/js/videoCacheManager.8e064b32f2f1d0e4d694.js',
   '/dist/js/rem.e28b7c510f9f88cb9315.js',

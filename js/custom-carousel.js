@@ -19,6 +19,11 @@ class VideoCarousel {
           // 创建视频元素
           const slideElement = document.createElement('div');
           slideElement.className = 'carousel-slide';
+          // 给slideElement添加背景图片
+          slideElement.style.backgroundImage = `url(${slide.poster})`;
+          slideElement.style.backgroundSize = 'cover';
+          slideElement.style.backgroundPosition = 'center';
+          slideElement.style.backgroundRepeat = 'no-repeat';
           
           const video = document.createElement('video');
           video.className = 'carousel-video';
