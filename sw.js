@@ -6,7 +6,7 @@ importScripts('/js/db.js');
 const cacheChannel = new BroadcastChannel('cache-progress-channel');
 
 // 缓存版本号，更改此值将触发Service Worker更新
-const CACHE_VERSION = '3.5.0';
+const CACHE_VERSION = '3.5.1';
 const CACHE_NAME = 'offline-h5-v' + CACHE_VERSION;
 const OFFLINE_URL = 'offline.html';
 // 需要缓存的资源列表
