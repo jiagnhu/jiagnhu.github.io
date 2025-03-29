@@ -4,27 +4,44 @@
 const cacheText = document.getElementById('cache');
 const enableOfflineMode = true;
 
+// 创建BroadcastChannel实例用于接收Service Worker消息
+const cacheChannel = new BroadcastChannel('cache-progress-channel');
+
+// 监听BroadcastChannel消息
+cacheChannel.onmessage = (event) => {
+    if (event.data && event.data.type === 'CACHE_PROGRESS') {
+        // 更新缓存进度显示
+        const cacheWorker = document.getElementById('cache-worker');
+        if (cacheWorker) {
+            const { progress, cachedCount, totalAssets, url } = event.data;
+            cacheWorker.textContent = `${progress}% (${cachedCount}/${totalAssets}) ${url}`;
+            
+            // 如果缓存完成，更新显示
+            if (progress === 100) {
+                const serviceWorker = document.getElementById('service-worker');
+                cacheWorker.textContent = '缓存完成 (100%)';
+                serviceWorker.className = 'online';
+            }
+        }
+    } else if (event.data && event.data.type === 'SYNC_COMPLETED') {
+        console.log('收到同步完成消息：', event.data.message);
+        // 刷新页面以显示最新状态
+        loadNotes();
+    }
+};
+
 
 if (enableOfflineMode && 'serviceWorker' in navigator) {
     console.time('注册Service');
     window.addEventListener('load', () => {
       if (cacheText) cacheText.textContent = '正在注册Service Worker...';
+     
         // 注册Service Worker
         navigator.serviceWorker.register('/sw.js')
             .then(registration => {
                 console.timeEnd('注册Service');
                 console.log('Service Worker 注册成功，作用域：', registration.scope);
                 updateCacheStatus();
-                
-                // 添加消息监听器，接收Service Worker发送的消息
-                navigator.serviceWorker.addEventListener('message', event => {
-                    if (event.data && event.data.type === 'SYNC_COMPLETED') {
-                        console.log('收到同步完成消息：', event.data.message);
-                        // 刷新页面以显示最新状态
-                        loadNotes();
-                    }
-                });
-                
                 // 检测Service Worker更新
                 registration.addEventListener('updatefound', () => {
                     // 当发现新的Service Worker时

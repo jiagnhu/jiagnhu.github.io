@@ -26,9 +26,6 @@ class WebpackServiceWorkerAssetsPlugin {
                           .find(([filename]) => {
                               // 匹配逻辑：文件名包含原始文件名且扩展名相同
                               const originalBasename = path.basename(originalPath);
-                              console.log('filename', filename)
-                              console.log('originalPath', originalPath)
-                              console.log('originalBasename', originalBasename)
                               return filename.includes(originalBasename)
                           }) || [];
 
@@ -67,14 +64,14 @@ class WebpackServiceWorkerAssetsPlugin {
                       `'${normalizedPublicPath}offline.html'`,
                       `'${normalizedPublicPath}manifest.json'`
                   ];
+                  // 删除dynamicAssets中的所有包含 '.DS_Store'字符串
+                  dynamicAssets.splice(0, dynamicAssets.length, ...dynamicAssets.filter(a => !a.includes('.DS_Store')));
 
                   const newCacheContent = [
                       'const CACHE_ASSETS = [',
-                      '  // ===== 核心资源 =====',
                       ...coreAssets.map(a => `  ${a},`),
-                      '  // ===== 生成资源 =====',
-                      ...dynamicAssets.map(a => `  ${a},`),
-                      '];'
+                      ...dynamicAssets.map(a =>  `  ${a},`),
+                      ']'
                   ].join('\n');
                   swContent = swContent.replace(CACHE_ASSETS_REGEX, newCacheContent);
 

@@ -2,30 +2,28 @@
 // 导入数据库操作函数
 importScripts('/dist/js/db.d864342bf7d967d0e0b8.js');
 
+// 创建BroadcastChannel实例用于发送缓存进度消息
+const cacheChannel = new BroadcastChannel('cache-progress-channel');
+
 // 缓存版本号，更改此值将触发Service Worker更新
 const CACHE_VERSION = '3.5.0';
 const CACHE_NAME = 'offline-h5-v' + CACHE_VERSION;
 const OFFLINE_URL = 'offline.html';
 // 需要缓存的资源列表
 const CACHE_ASSETS = [
-  // ===== 核心资源 =====
   '/',
   '/index.html',
   '/offline.html',
   '/manifest.json',
-  // ===== 生成资源 =====
   '/dist/images/cover-1.c430d792c7407caf1834.webp',
   '/dist/images/editor-star.f0be85a46f7d80ed0910.gif',
-  '/sw.js',
-  '/favicon.ico',
   '/manifest.json',
-  '/images/.DS_Store',
+  '/favicon.ico',
+  '/sw.js',
   '/images/btn-start.webp',
   '/images/editor-star.gif',
-  '/images/icons/.DS_Store',
   '/images/icons/b1.webp',
   '/images/icons/g10.webp',
-  '/video/.DS_Store',
   '/video/1.mp4',
   '/video/2.mp4',
   '/video/3.mp4',
@@ -36,16 +34,15 @@ const CACHE_ASSETS = [
   '/video/cover-4.webp',
   '/index.html',
   '/offline.html',
-  '/dist/js/main.cb7eacc31fd91431a0da.js',
+  '/dist/js/rem.e28b7c510f9f88cb9315.js',
+  '/dist/js/main.f108999031cca5dd34dc.js',
+  '/dist/js/db.d864342bf7d967d0e0b8.js',
   '/dist/js/customCarousel.7b890c4348049128ea11.js',
   '/dist/js/nfc.ed538ba699de1ce2cbb2.js',
-  '/dist/js/videoCacheManager.8e064b32f2f1d0e4d694.js',
-  '/dist/js/rem.e28b7c510f9f88cb9315.js',
-  '/dist/js/db.d864342bf7d967d0e0b8.js',
   '/dist/js/updateNotification.5070a4861c46d80d1b1d.js',
   '/dist/css/styles.26817d5264d65738108c.css',
   '/dist/js/styles.31d6cfe0d16ae931b73c.js',
-];;
+];
 
 // Service Worker 安装事件
 self.addEventListener('install', (event) => {
@@ -70,7 +67,14 @@ self.addEventListener('install', (event) => {
             return cache.add(url).then(() => {
               cachedCount++;
               const progress = Math.round((cachedCount / totalAssets) * 100);
-              console.log(`[Service Worker] 缓存进度: ${progress}% (${cachedCount}/${totalAssets})`);
+              // 使用BroadcastChannel发送缓存进度消息
+              cacheChannel.postMessage({
+                type: 'CACHE_PROGRESS',
+                progress: progress,
+                cachedCount: cachedCount,
+                totalAssets: totalAssets,
+                url
+              });
               
               // 当所有资源缓存完成时
               if (cachedCount === totalAssets) {
@@ -159,7 +163,6 @@ function cacheFirstStrategy(event) {
         // 如果在缓存中找到响应，则返回缓存的版本
         if (cachedResponse) {
           const url = event.request.url;
-          console.log('[Service Worker] 缓存命中:', url);
           return cachedResponse;
         }
         

@@ -16,22 +16,19 @@ module.exports = (env, argv) => {
       static: {
         directory: path.join(__dirname, './'),
       },
-      hot: true,
+      hot: false,
       port: 3000,
       open: true,
       compress: true,
       historyApiFallback: true,
-      client: {
-        webSocketTransport: "ws"
-      }
+      client: false
     },
     entry: {
+      rem: './js/rem.js',
       main: './js/app.js',
+      db: './js/db.js',
       customCarousel: './js/custom-carousel.js',
       nfc: './js/nfc.js',
-      videoCacheManager: './js/video-cache-manager.js',
-      rem: './js/rem.js',
-      db: './js/db.js',
       updateNotification: './js/update-notification.js',
       // 移除sw.js作为入口点，改为使用CopyPlugin复制
       // 添加CSS入口点

@@ -2,6 +2,9 @@
 // 导入数据库操作函数
 importScripts('/js/db.js');
 
+// 创建BroadcastChannel实例用于发送缓存进度消息
+const cacheChannel = new BroadcastChannel('cache-progress-channel');
+
 // 缓存版本号，更改此值将触发Service Worker更新
 const CACHE_VERSION = '3.5.0';
 const CACHE_NAME = 'offline-h5-v' + CACHE_VERSION;
@@ -61,7 +64,14 @@ self.addEventListener('install', (event) => {
             return cache.add(url).then(() => {
               cachedCount++;
               const progress = Math.round((cachedCount / totalAssets) * 100);
-              console.log(`[Service Worker] 缓存进度: ${progress}% (${cachedCount}/${totalAssets})`);
+              // 使用BroadcastChannel发送缓存进度消息
+              cacheChannel.postMessage({
+                type: 'CACHE_PROGRESS',
+                progress: progress,
+                cachedCount: cachedCount,
+                totalAssets: totalAssets,
+                url
+              });
               
               // 当所有资源缓存完成时
               if (cachedCount === totalAssets) {
@@ -150,7 +160,6 @@ function cacheFirstStrategy(event) {
         // 如果在缓存中找到响应，则返回缓存的版本
         if (cachedResponse) {
           const url = event.request.url;
-          console.log('[Service Worker] 缓存命中:', url);
           return cachedResponse;
         }
         
